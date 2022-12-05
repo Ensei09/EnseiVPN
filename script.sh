@@ -906,8 +906,6 @@ do
 		sleep 3
 		clear
 		display_menu
-        # Running sysinfo
-        bash /etc/profile.d/juans.sh
 		ports
 		echo -e "\033[1;32m		Premium Server Installation Done!\033[0m"
 		break;;
@@ -941,8 +939,6 @@ do
 		sleep 3
 		clear
 		display_menu
-        # Running sysinfo
-        bash /etc/profile.d/juans.sh
 		ports
 		echo -e "\033[1;32m		VIP Server Installation Done!\033[0m"
 		break;;
@@ -976,8 +972,6 @@ do
 		sleep 3
 		clear
 		display_menu
-        # Running sysinfo
-        bash /etc/profile.d/juans.sh
 		ports
 		echo -e "\033[1;32m		Private Server Installation Done!\033[0m"
 		break;;
