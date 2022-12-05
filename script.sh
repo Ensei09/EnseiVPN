@@ -39,10 +39,8 @@ systemupdate () {
 apt-get update
 apt-get upgrade -y
 apt-get -y install dropbear
-wget -qO /etc/banner "https://raw.githubusercontent.com/Ensei09/Test-Repo/main/SSHBanner"
 sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
 sed -i 's/DROPBEAR_PORT=22/DROPBEAR_PORT=550/g' /etc/default/dropbear
-sed -i 's/DROPBEAR_BANNER=""/DROPBEAR_BANNER="/etc/banner/"g' /etc/default/dropbear
 echo "/bin/false" >> /etc/shells
 echo "/usr/sbin/nologin" >> /etc/shells
 systemctl restart dropbear
