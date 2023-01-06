@@ -299,10 +299,10 @@ EOM6
 
 cat <<\EOM7 >/etc/openvpn/script/config.sh
 #!/bin/bash
-HOST='52.77.222.221'
-USER='sql_panel_enseiv'
-PASS='X5jyaPs8teJBSTeJ'
-DB='sql_panel_enseiv'
+HOST='1.2.3.4'
+USER='host'
+PASS='pass'
+DB='db'
 EOM7
 
 cat <<\EOM8 >/etc/openvpn/script/connect.sh
