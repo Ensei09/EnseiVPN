@@ -1025,7 +1025,3 @@ done
 history -c
 history -w
 rm -rf script.sh
-sleep 5
-reboot
-
-
