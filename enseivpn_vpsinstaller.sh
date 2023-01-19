@@ -40,12 +40,31 @@ apt-get update
 apt-get upgrade -y
 apt-get -y install dropbear
 wget -qO /etc/banner "https://raw.githubusercontent.com/Ensei09/Test-Repo/main/SSHBanner"
-sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
-sed -i 's/DROPBEAR_PORT=22/DROPBEAR_PORT=550/g' /etc/default/dropbear
-sed -i 's/DROPBEAR_BANNER=""/DROPBEAR_BANNER="/etc/banner/"g' /etc/default/dropbear
+
+ # Removing some duplicate config file
+ rm -rf /etc/default/dropbear*
+
+  # creating dropbear config using cat eof tricks
+ cat <<'MyDropbear' > /etc/default/dropbear
+# My Dropbear Config
+NO_START=0
+DROPBEAR_PORT=550
+DROPBEAR_EXTRA_ARGS=""
+DROPBEAR_BANNER="/etc/banner"
+DROPBEAR_RSAKEY="/etc/dropbear/dropbear_rsa_host_key"
+DROPBEAR_DSSKEY="/etc/dropbear/dropbear_dss_host_key"
+DROPBEAR_ECDSAKEY="/etc/dropbear/dropbear_ecdsa_host_key"
+DROPBEAR_RECEIVE_WINDOW=65536
+MyDropbear
+
 echo "/bin/false" >> /etc/shells
 echo "/usr/sbin/nologin" >> /etc/shells
 systemctl restart dropbear
+
+# sed -i 's/NO_START=1/NO_START=0/g' /etc/default/dropbear
+# sed -i 's/DROPBEAR_PORT=22/DROPBEAR_PORT=550/g' /etc/default/dropbear
+# sed -i 's/DROPBEAR_BANNER=""/DROPBEAR_BANNER="/etc/banner/"g' /etc/default/dropbear
+
 }
 
 systempackages () {
