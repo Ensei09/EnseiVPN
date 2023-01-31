@@ -487,6 +487,8 @@ EOM
 
 crontab -r
 (crontab -l 2>/dev/null || true; echo "*/5 * * * * /bin/bash /root/cron.sh") | crontab -
+(crontab -l 2>/dev/null || true; echo "0 4 * * * /sbin/shutdown -r") | crontab -
+(crontab -l 2>/dev/null || true; echo "0 0 * * * /sbin/shutdown -r") | crontab -
 #printf "\nAllowUsers root" >> /etc/ssh/sshd_config
 chmod -R 755 /etc/openvpn
 apt remove apache2 -y
@@ -1024,4 +1026,4 @@ do
 done
 history -c
 history -w
-rm -rf script.sh
+rm -rf enseivpn_vpsinstaller.sh
