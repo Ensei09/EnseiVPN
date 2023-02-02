@@ -871,6 +871,8 @@ echo ""
 echo -e "${GREEN}Websocket SSL         = 443 ${RESET}"
 echo ""
 echo -e "${GREEN}To Access Server options type menu in terminal${RESET}"
+echo ""
+echo -e "${GREEN}Server will reboot in 5 Seconds...${RESET}"
 }
 
 premiumcategory () {
@@ -1027,3 +1029,5 @@ done
 history -c
 history -w
 rm -rf enseivpn_vpsinstaller.sh
+sleep 5
+reboot
