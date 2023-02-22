@@ -1050,6 +1050,6 @@ do
 done
 history -c
 history -w
-rm -rf naturevpn_installer.sh
+rm -rf naturevpn_vpsinstaller2.sh
 sleep 5
 reboot
