@@ -318,10 +318,10 @@ EOM6
 
 cat <<\EOM7 >/etc/openvpn/script/config.sh
 #!/bin/bash
-HOST= $HOST
-USER= $USER
-PASS= $PASS
-DB= $DB
+HOST='34.143.232.146'
+USER='sql_main_panel_e'
+PASS='hSybS5rtCXNxXjaE'
+DB='sql_main_panel_e'
 EOM7
 
 cat <<\EOM8 >/etc/openvpn/script/connect.sh
@@ -934,12 +934,6 @@ user_name=`mysql -u $USER -p$PASS -D $DB -h $HOST -sN -e "$Query"`
 EOM
 wget -O /usr/local/sbin/ssh.php https://raw.githubusercontent.com/Ensei09/Test-Repo/main/YPanel%20Dependencies/private.sh -q
 }
-
-echo -e "Before Beginning Installation, please complete the details needed below:"
-read -p "Enter YPanel HOST: " HOST
-read -p "Enter YPanel DB NAME: " DB
-read -p "Enter YPanel USER: " USER
-read -p "Enter YPanel PASS: " PASS
 
 display_menu
 PS3='Please enter your choice: '
