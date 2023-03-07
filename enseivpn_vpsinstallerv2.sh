@@ -318,10 +318,10 @@ EOM6
 
 cat <<\EOM7 >/etc/openvpn/script/config.sh
 #!/bin/bash
-HOST='34.143.232.146'
-USER='sql_main_panel_e'
-PASS='hSybS5rtCXNxXjaE'
-DB='sql_main_panel_e'
+HOST='143.198.213.53'
+USER='sql_panel1_ensei'
+PASS='e4bGpR2mCKkBSZJw'
+DB='sql_panel1_ensei'
 EOM7
 
 cat <<\EOM8 >/etc/openvpn/script/connect.sh
@@ -357,12 +357,13 @@ listen-address  0.0.0.0:8000
 listen-address  0.0.0.0:8080
 listen-address  0.0.0.0:8888
 listen-address  0.0.0.0:3128
-toggle  1
+toggle 1
 enable-remote-toggle  0
 enable-remote-http-toggle  0
 enable-edit-actions 0
 enforce-blocks 0
 buffer-limit 4096
+max-client-connections 4000
 enable-proxy-authentication-forwarding 1
 forwarded-connect-retries  1
 accept-intercepted-requests 1
