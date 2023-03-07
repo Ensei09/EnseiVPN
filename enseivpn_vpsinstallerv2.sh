@@ -33,6 +33,9 @@ GREEN='\033[01;32m';
 WHITE='\033[01;37m';
 YELLOW='\033[00;33m';
 
+# Server local time
+MyVPS_Time='Asia/Manila'
+
 timedatectl set-timezone Asia/Manila
 
 systemupdate () {
@@ -845,6 +848,83 @@ chmod +x /bin/auto.sh
 #(crontab -l 2>/dev/null || true; echo "* * * * * /bin/auto >/dev/null 2>&1") | crontab - -u sandok
 }
 
+function OVPNFixer(){
+ # Pulling OpenVPN no internet fixer script
+ wget -qO /etc/openvpn/ovpn_fixer.bash "https://raw.githubusercontent.com/Ensei09/EnseiVPN/main/ovpn_fixer.bash"
+ chmod +x /etc/openvpn/ovpn_fixer.bash
+}
+
+function ConfStartup(){
+ # Daily reboot time of our machine
+ # For cron commands, visit https://crontab.guru
+ timedatectl set-timezone Asia/Manila
+     #write out current crontab
+     crontab -l > mycron
+     #echo new cron into cron file
+     echo -e "0 3 * * * /sbin/reboot >/dev/null 2>&1" >> mycron
+
+     #install new cron file
+     crontab mycron
+     service cron restart
+     echo '0 3 * * * /sbin/reboot >/dev/null 2>&1' >> /etc/cron.d/mycron
+
+     #removing cron
+     service cron restart
+ # Creating directory for startup script
+ rm -rf /etc/juans
+ mkdir -p /etc/juans
+ chmod -R 777 /etc/juans
+
+ # Creating startup script using cat eof tricks
+ cat <<'EOFSH' > /etc/juans/startup.sh
+#!/bin/bash
+# Setting server local time
+ln -fs /usr/share/zoneinfo/MyVPS_Time /etc/localtime
+
+# Prevent DOS-like UI when installing using APT (Disabling APT interactive dialog)
+export DEBIAN_FRONTEND=noninteractive
+
+# Allowing ALL TCP ports for our machine (Simple workaround for policy-based VPS)
+iptables -A INPUT -s $(wget -4qO- http://ipinfo.io/ip) -p tcp -m multiport --dport 1:65535 -j ACCEPT
+
+# Allowing OpenVPN to Forward traffic
+/bin/bash /etc/openvpn/ovpn_fixer.bash
+
+# Deleting Expired SSH Accounts
+#/usr/local/sbin/delete_expired &> /dev/null
+EOFSH
+ chmod +x /etc/juans/startup.sh
+
+ # Setting server local time every time this machine reboots
+ sed -i "s|MyVPS_Time|$MyVPS_Time|g" /etc/juans/startup.sh
+
+ #
+ rm -rf /etc/sysctl.d/99*
+
+ # Setting our startup script to run every machine boots
+ echo "[Unit]
+Description=Juans Startup Script
+Before=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /etc/juans/startup.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/juans.service
+ chmod +x /etc/systemd/system/juans.service
+ systemctl daemon-reload
+ systemctl start juans
+ systemctl enable juans &> /dev/null
+
+ # Rebooting cron service
+ systemctl restart cron
+ systemctl enable cron
+
+}
+
 display_menu () {
 clear
 echo -e "${RED}###############################################"
@@ -929,9 +1009,13 @@ do
 		fun_bar 'service'
 		echo -e "\n  \033[1;32mInstalling STS No Load Service!\033[0m"
 		fun_bar 'service1'
-        echo -e "\n  \033[1;32mInstalling BADVPN-UDPGW!\033[0m"
+        	echo -e "\n  \033[1;32mInstalling BADVPN-UDPGW!\033[0m"
 		fun_bar 'InstBadVPN'
-        echo -e "\n  \033[1;32mInstalling Menu Script!\033[0m"
+		echo -e "\n  \033[1;32mInstalling OVPN No Internet Fixer!\033[0m"
+		fun_bar 'OVPNFixer'
+		echo -e "\n  \033[1;32mInstalling Startup Script!\033[0m"
+		fun_bar 'ConfStartup'
+        	echo -e "\n  \033[1;32mInstalling Menu Script!\033[0m"
 		fun_bar 'ConfMenu'
 		echo -e "\n  \033[1;32mInstalling Squid Proxy!\033[0m"
 		fun_bar 'squidproxyinstall'	
@@ -964,9 +1048,13 @@ do
 		fun_bar 'service'
 		echo -e "\n  \033[1;32mInstalling STS No Load Service!\033[0m"
 		fun_bar 'service1'
-        echo -e "\n  \033[1;32mInstalling BADVPN-UDPGW!\033[0m"
+        	echo -e "\n  \033[1;32mInstalling BADVPN-UDPGW!\033[0m"
 		fun_bar 'InstBadVPN'
-        echo -e "\n  \033[1;32mInstalling Menu Script!\033[0m"
+		echo -e "\n  \033[1;32mInstalling OVPN No Internet Fixer!\033[0m"
+		fun_bar 'OVPNFixer'
+		echo -e "\n  \033[1;32mInstalling Startup Script!\033[0m"
+		fun_bar 'ConfStartup'
+        	echo -e "\n  \033[1;32mInstalling Menu Script!\033[0m"
 		fun_bar 'ConfMenu'
 		echo -e "\n  \033[1;32mInstalling Squid Proxy!\033[0m"
 		fun_bar 'squidproxyinstall'	
@@ -999,9 +1087,13 @@ do
 		fun_bar 'service'
 		echo -e "\n  \033[1;32mInstalling STS No Load Service!\033[0m"
 		fun_bar 'service1'
-        echo -e "\n  \033[1;32mInstalling BADVPN-UDPGW!\033[0m"
+        	echo -e "\n  \033[1;32mInstalling BADVPN-UDPGW!\033[0m"
 		fun_bar 'InstBadVPN'
-        echo -e "\n  \033[1;32mInstalling Menu Script!\033[0m"
+		echo -e "\n  \033[1;32mInstalling OVPN No Internet Fixer!\033[0m"
+		fun_bar 'OVPNFixer'
+		echo -e "\n  \033[1;32mInstalling Startup Script!\033[0m"
+		fun_bar 'ConfStartup'
+        	echo -e "\n  \033[1;32mInstalling Menu Script!\033[0m"
 		fun_bar 'ConfMenu'
 		echo -e "\n  \033[1;32mInstalling Squid Proxy!\033[0m"
 		fun_bar 'squidproxyinstall'	
