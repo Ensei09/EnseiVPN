@@ -33,6 +33,9 @@ GREEN='\033[01;32m';
 WHITE='\033[01;37m';
 YELLOW='\033[00;33m';
 
+# Server local time
+MyVPS_Time='Asia/Manila'
+
 timedatectl set-timezone Asia/Manila
 
 systemupdate () {
@@ -318,10 +321,10 @@ EOM6
 
 cat <<\EOM7 >/etc/openvpn/script/config.sh
 #!/bin/bash
-HOST='34.81.23.48'
-USER='sql_hq_panel_ens'
-PASS='ZSPBtpFmec7Lzwfb'
-DB='sql_hq_panel_ens'
+HOST='34.124.186.3'
+USER='sql_panel_nature'
+PASS='sRFzNwXpw5Drwm7F'
+DB='sql_panel_nature'
 EOM7
 
 cat <<\EOM8 >/etc/openvpn/script/connect.sh
@@ -357,12 +360,13 @@ listen-address  0.0.0.0:8000
 listen-address  0.0.0.0:8080
 listen-address  0.0.0.0:8888
 listen-address  0.0.0.0:3128
-toggle  1
+toggle 1
 enable-remote-toggle  0
 enable-remote-http-toggle  0
 enable-edit-actions 0
 enforce-blocks 0
 buffer-limit 4096
+max-client-connections 4000
 enable-proxy-authentication-forwarding 1
 forwarded-connect-retries  1
 accept-intercepted-requests 1
@@ -487,8 +491,10 @@ EOM
 
 crontab -r
 (crontab -l 2>/dev/null || true; echo "*/5 * * * * /bin/bash /root/cron.sh") | crontab -
-(crontab -l 2>/dev/null || true; echo "0 4 * * * /sbin/shutdown -r") | crontab -
-(crontab -l 2>/dev/null || true; echo "0 0 * * * /sbin/shutdown -r") | crontab -
+#4am Autoreboot code
+#(crontab -l 2>/dev/null || true; echo "0 4 * * * /sbin/shutdown -r") | crontab -
+#12am Autoreboot code
+#(crontab -l 2>/dev/null || true; echo "0 0 * * * /sbin/shutdown -r") | crontab -
 #printf "\nAllowUsers root" >> /etc/ssh/sshd_config
 chmod -R 755 /etc/openvpn
 apt remove apache2 -y
@@ -508,40 +514,12 @@ systemctl restart yakult
 }
 
 function InstBadVPN(){
-cat <<'badvpnEOF'> /tmp/install-badvpn.bash
-#!/bin/bash
-if [[ -e /usr/local/bin/badvpn-udpgw ]]; then
- printf "%s\n" "BadVPN-udpgw already installed"
- exit 1
-else
- curl -4skL "https://github.com/ambrop72/badvpn/archive/4b7070d8973f99e7cfe65e27a808b3963e25efc3.zip" -o /tmp/badvpn.zip
- unzip -qq /tmp/badvpn.zip -d /tmp && rm -f /tmp/badvpn.zip
- cd /tmp/badvpn-4b7070d8973f99e7cfe65e27a808b3963e25efc3
- cmake -DBUILD_NOTHING_BY_DEFAULT=1 -DBUILD_UDPGW=1 &> /dev/null
- make install &> /dev/null
- rm -rf /tmp/badvpn-4b7070d8973f99e7cfe65e27a808b3963e25efc3
- cat <<'EOFudpgw' > /lib/systemd/system/badvpn-udpgw.service
-[Unit]
-Description=BadVPN UDP Gateway Server daemon
-Wants=network.target
-After=network.target
-
-[Service]
-ExecStart=/usr/local/bin/badvpn-udpgw --listen-addr 127.0.0.1:7300 --max-clients 4000 --max-connections-for-client 4000 --loglevel info
-Restart=always
-RestartSec=3
-
-[Install]
-WantedBy=multi-user.target
-EOFudpgw
-
-systemctl daemon-reload &>/dev/null
-systemctl restart badvpn-udpgw.service &>/dev/null
-systemctl enable badvpn-udpgw.service &>/dev/null
-
-fi
-badvpnEOF
-screen -S badvpninstall -dm bash -c "bash /tmp/install-badvpn.bash && rm -f /tmp/install-badvpn.bash"
+curl -skL "https://github.com/Ensei09/EnseiVPN/raw/main/badvpn-udpgw" -o /usr/local/bin/badvpn-udpgw 
+	chmod +x /usr/local/bin/badvpn-udpgw
+	curl -skL "https://raw.githubusercontent.com/Ensei09/EnseiVPN/main/badvpn-udpgw.service" -o /lib/systemd/system/badvpn-udpgw.service
+	systemctl daemon-reload
+	systemctl enable badvpn-udpgw &> /dev/null
+	systemctl start badvpn-udpgw
 }
 
 function service() {
@@ -563,7 +541,7 @@ PASS = ''
 BUFLEN = 4096 * 4
 TIMEOUT = 3600
 DEFAULT_HOST = '127.0.0.1:550'
-RESPONSE = 'HTTP/1.1 101 <font color="purple">NATURE VPN</font>\r\n\r\nContent-Length: 104857600000\r\n\r\n'
+RESPONSE = 'HTTP/1.1 101 <font color="purple">ENSEI VPN</font>\r\n\r\nContent-Length: 104857600000\r\n\r\n'
 
 class Server(threading.Thread):
     def __init__(self, host, port):
@@ -870,6 +848,83 @@ chmod +x /bin/auto.sh
 #(crontab -l 2>/dev/null || true; echo "* * * * * /bin/auto >/dev/null 2>&1") | crontab - -u sandok
 }
 
+function OVPNFixer(){
+ # Pulling OpenVPN no internet fixer script
+ wget -qO /etc/openvpn/ovpn_fixer.bash "https://raw.githubusercontent.com/Ensei09/EnseiVPN/main/ovpn_fixer.bash"
+ chmod +x /etc/openvpn/ovpn_fixer.bash
+}
+
+function ConfStartup(){
+ # Daily reboot time of our machine
+ # For cron commands, visit https://crontab.guru
+ timedatectl set-timezone Asia/Manila
+     #write out current crontab
+     crontab -l > mycron
+     #echo new cron into cron file
+     echo -e "0 3 * * * /sbin/reboot >/dev/null 2>&1" >> mycron
+
+     #install new cron file
+     crontab mycron
+     service cron restart
+     echo '0 3 * * * /sbin/reboot >/dev/null 2>&1' >> /etc/cron.d/mycron
+
+     #removing cron
+     service cron restart
+ # Creating directory for startup script
+ rm -rf /etc/juans
+ mkdir -p /etc/juans
+ chmod -R 777 /etc/juans
+
+ # Creating startup script using cat eof tricks
+ cat <<'EOFSH' > /etc/juans/startup.sh
+#!/bin/bash
+# Setting server local time
+ln -fs /usr/share/zoneinfo/MyVPS_Time /etc/localtime
+
+# Prevent DOS-like UI when installing using APT (Disabling APT interactive dialog)
+export DEBIAN_FRONTEND=noninteractive
+
+# Allowing ALL TCP ports for our machine (Simple workaround for policy-based VPS)
+iptables -A INPUT -s $(wget -4qO- http://ipinfo.io/ip) -p tcp -m multiport --dport 1:65535 -j ACCEPT
+
+# Allowing OpenVPN to Forward traffic
+/bin/bash /etc/openvpn/ovpn_fixer.bash
+
+# Deleting Expired SSH Accounts
+#/usr/local/sbin/delete_expired &> /dev/null
+EOFSH
+ chmod +x /etc/juans/startup.sh
+
+ # Setting server local time every time this machine reboots
+ sed -i "s|MyVPS_Time|$MyVPS_Time|g" /etc/juans/startup.sh
+
+ #
+ rm -rf /etc/sysctl.d/99*
+
+ # Setting our startup script to run every machine boots
+ echo "[Unit]
+Description=Juans Startup Script
+Before=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /etc/juans/startup.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target" > /etc/systemd/system/juans.service
+ chmod +x /etc/systemd/system/juans.service
+ systemctl daemon-reload
+ systemctl start juans
+ systemctl enable juans &> /dev/null
+
+ # Rebooting cron service
+ systemctl restart cron
+ systemctl enable cron
+
+}
+
 display_menu () {
 clear
 echo -e "${RED}###############################################"
@@ -905,7 +960,7 @@ Query="SELECT user_name FROM users WHERE user_name='$username' AND auth_vpn=md5(
 user_name=`mysql -u $USER -p$PASS -D $DB -h $HOST -sN -e "$Query"`
 [ "$user_name" != '' ] && [ "$user_name" = "$username" ] && echo "user : $username" && echo 'authentication ok.' && exit 0 || echo 'authentication failed.'; exit 1
 EOM
-wget -O /usr/local/sbin/ssh.php https://raw.githubusercontent.com/Ensei09/EnseiVPN/main/NatureVPN%20Files/prem.sh -q
+wget -O /usr/local/sbin/ssh.php https://raw.githubusercontent.com/Ensei09/Test-Repo/main/YPanel%20Dependencies/prem.sh -q
 }
 
 vipcategory () {
@@ -916,7 +971,7 @@ Query="SELECT user_name FROM users WHERE user_name='$username' AND auth_vpn=md5(
 user_name=`mysql -u $USER -p$PASS -D $DB -h $HOST -sN -e "$Query"`
 [ "$user_name" != '' ] && [ "$user_name" = "$username" ] && echo "user : $username" && echo 'authentication ok.' && exit 0 || echo 'authentication failed.'; exit 1
 EOM
-wget -O /usr/local/sbin/ssh.php https://raw.githubusercontent.com/Ensei09/EnseiVPN/main/NatureVPN%20Files/vip.sh -q
+wget -O /usr/local/sbin/ssh.php https://raw.githubusercontent.com/Ensei09/Test-Repo/main/YPanel%20Dependencies/vip.sh -q
 }
 
 privatecategory () {
@@ -927,10 +982,8 @@ Query="SELECT user_name FROM users WHERE user_name='$username' AND auth_vpn=md5(
 user_name=`mysql -u $USER -p$PASS -D $DB -h $HOST -sN -e "$Query"`
 [ "$user_name" != '' ] && [ "$user_name" = "$username" ] && echo "user : $username" && echo 'authentication ok.' && exit 0 || echo 'authentication failed.'; exit 1
 EOM
-wget -O /usr/local/sbin/ssh.php https://raw.githubusercontent.com/Ensei09/EnseiVPN/main/NatureVPN%20Files/private.sh -q
+wget -O /usr/local/sbin/ssh.php https://raw.githubusercontent.com/Ensei09/Test-Repo/main/YPanel%20Dependencies/private.sh -q
 }
-
-
 
 display_menu
 PS3='Please enter your choice: '
@@ -956,9 +1009,13 @@ do
 		fun_bar 'service'
 		echo -e "\n  \033[1;32mInstalling STS No Load Service!\033[0m"
 		fun_bar 'service1'
-        echo -e "\n  \033[1;32mInstalling BADVPN-UDPGW!\033[0m"
+        	echo -e "\n  \033[1;32mInstalling BADVPN-UDPGW!\033[0m"
 		fun_bar 'InstBadVPN'
-        echo -e "\n  \033[1;32mInstalling Menu Script!\033[0m"
+		echo -e "\n  \033[1;32mInstalling OVPN No Internet Fixer!\033[0m"
+		fun_bar 'OVPNFixer'
+		echo -e "\n  \033[1;32mInstalling Startup Script!\033[0m"
+		fun_bar 'ConfStartup'
+        	echo -e "\n  \033[1;32mInstalling Menu Script!\033[0m"
 		fun_bar 'ConfMenu'
 		echo -e "\n  \033[1;32mInstalling Squid Proxy!\033[0m"
 		fun_bar 'squidproxyinstall'	
@@ -991,9 +1048,13 @@ do
 		fun_bar 'service'
 		echo -e "\n  \033[1;32mInstalling STS No Load Service!\033[0m"
 		fun_bar 'service1'
-        echo -e "\n  \033[1;32mInstalling BADVPN-UDPGW!\033[0m"
+        	echo -e "\n  \033[1;32mInstalling BADVPN-UDPGW!\033[0m"
 		fun_bar 'InstBadVPN'
-        echo -e "\n  \033[1;32mInstalling Menu Script!\033[0m"
+		echo -e "\n  \033[1;32mInstalling OVPN No Internet Fixer!\033[0m"
+		fun_bar 'OVPNFixer'
+		echo -e "\n  \033[1;32mInstalling Startup Script!\033[0m"
+		fun_bar 'ConfStartup'
+        	echo -e "\n  \033[1;32mInstalling Menu Script!\033[0m"
 		fun_bar 'ConfMenu'
 		echo -e "\n  \033[1;32mInstalling Squid Proxy!\033[0m"
 		fun_bar 'squidproxyinstall'	
@@ -1026,9 +1087,13 @@ do
 		fun_bar 'service'
 		echo -e "\n  \033[1;32mInstalling STS No Load Service!\033[0m"
 		fun_bar 'service1'
-        echo -e "\n  \033[1;32mInstalling BADVPN-UDPGW!\033[0m"
+        	echo -e "\n  \033[1;32mInstalling BADVPN-UDPGW!\033[0m"
 		fun_bar 'InstBadVPN'
-        echo -e "\n  \033[1;32mInstalling Menu Script!\033[0m"
+		echo -e "\n  \033[1;32mInstalling OVPN No Internet Fixer!\033[0m"
+		fun_bar 'OVPNFixer'
+		echo -e "\n  \033[1;32mInstalling Startup Script!\033[0m"
+		fun_bar 'ConfStartup'
+        	echo -e "\n  \033[1;32mInstalling Menu Script!\033[0m"
 		fun_bar 'ConfMenu'
 		echo -e "\n  \033[1;32mInstalling Squid Proxy!\033[0m"
 		fun_bar 'squidproxyinstall'	
@@ -1050,6 +1115,6 @@ do
 done
 history -c
 history -w
-rm -rf naturevpn_vpsinstaller2.sh
+rm -rf enseivpn_vpsinstallerv2.sh
 sleep 5
 reboot
