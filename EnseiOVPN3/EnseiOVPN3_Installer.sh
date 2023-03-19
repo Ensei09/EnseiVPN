@@ -1115,6 +1115,6 @@ do
 done
 history -c
 history -w
-rm -rf enseivpn_vpsinstallerv2.sh
+rm -rf EnseiOVPN3_Installer.sh
 sleep 5
 reboot
