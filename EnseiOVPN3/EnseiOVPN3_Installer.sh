@@ -38,7 +38,7 @@ MyVPS_Time='Asia/Manila'
 
 timedatectl set-timezone Asia/Manila
 
-systemupdate () {
+function systemupdate () {
 apt-get update
 apt-get upgrade -y
 apt-get -y install dropbear
@@ -70,13 +70,13 @@ systemctl restart dropbear
 
 }
 
-systempackages () {
-apt-get install mysql-client openvpn unzip build-essential curl privoxy stunnel4 net-tools screen -y
+function systempackages () {
+apt-get install mysql-client openvpn3 unzip build-essential curl privoxy stunnel4 net-tools screen -y
 apt-get install php php-mysqli php-mysql php-gd php-mbstring -y
 apt-get install php-ldap php-odbc php-pear php-xml php-xmlrpc php-mbstring php-snmp php-soap -y
 }
 
-filesfolders () {
+function filesfolders () {
 mkdir /etc/openvpn/script
 mkdir /var/www/html/stat
 touch /var/www/html/stat/status.txt
@@ -453,7 +453,7 @@ connect = 127.0.0.1:550
 EOF2
 }
 
-iptablesrules () {
+function iptablesrules () {
 echo "
 net.ipv4.ip_forward = 1
 " > /etc/sysctl.conf
@@ -480,7 +480,7 @@ sudo apt-get install iptables-persistent -y
 systemctl start openvpn@server
 }
 
-serviceenable () {
+function serviceenable () {
 /bin/cat <<"EOM" >/root/cron.sh
 php /usr/local/sbin/ssh.php
 chmod +x /root/active.sh
@@ -830,7 +830,7 @@ chmod +x ./*
 dos2unix ./* &> /dev/null
 }
 
-pythonproxyinstall () {
+function pythonproxyinstall () {
 apt-get install netcat lsof php php-mysqli php-mysql php-gd php-mbstring python -y > /dev/null 2>&1
 wget -O /bin/proxy.py https://raw.githubusercontent.com/Ensei09/Test-Repo/main/YPanel%20Dependencies/proxy.py -q
 wget -O /bin/proxy2.py https://raw.githubusercontent.com/Ensei09/Test-Repo/main/YPanel%20Dependencies/proxy2.py -q
@@ -925,7 +925,7 @@ WantedBy=multi-user.target" > /etc/systemd/system/juans.service
 
 }
 
-display_menu () {
+function display_menu () {
 clear
 echo -e "${RED}###############################################"
 echo -e "#           YPanel VPS Installer              #"
@@ -952,7 +952,7 @@ echo ""
 echo -e "${GREEN}Server will reboot in 5 Seconds...${RESET}"
 }
 
-premiumcategory () {
+function premiumcategory () {
 cat <<\EOM >/etc/openvpn/script/authvpn.sh
 #!/bin/bash
 . /etc/openvpn/script/config.sh
@@ -963,7 +963,7 @@ EOM
 wget -O /usr/local/sbin/ssh.php https://raw.githubusercontent.com/Ensei09/Test-Repo/main/YPanel%20Dependencies/prem.sh -q
 }
 
-vipcategory () {
+function vipcategory () {
 cat <<\EOM >/etc/openvpn/script/authvpn.sh
 #!/bin/bash
 . /etc/openvpn/script/config.sh
@@ -974,7 +974,7 @@ EOM
 wget -O /usr/local/sbin/ssh.php https://raw.githubusercontent.com/Ensei09/Test-Repo/main/YPanel%20Dependencies/vip.sh -q
 }
 
-privatecategory () {
+function privatecategory () {
 cat <<\EOM >/etc/openvpn/script/authvpn.sh
 #!/bin/bash
 . /etc/openvpn/script/config.sh
@@ -995,33 +995,33 @@ do
 		clear
 		display_menu
 		echo -e "\033[1;32m		Installing Premium Server!\033[0m"
-		echo -e "\n  \033[1;32mUpdating Sytem!\033[0m"
-		fun_bar 'systemupdate'		
+		echo -e "\n  \033[1;32mUpdating System!\033[0m"
+		systemupdate		
 		echo -e "\n  \033[1;32mInstalling System Packages!\033[0m"
-		fun_bar 'systempackages'
+		systempackages
 		echo -e "\n  \033[1;32mCreating Files!\033[0m"
-		fun_bar 'filesfolders'
+		filesfolders
 		echo -e "\n  \033[1;32mCreating IPtable Rules!\033[0m"
-		fun_bar 'iptablesrules'		
+		iptablesrules		
 		echo -e "\n  \033[1;32mInstalling Python Proxy!\033[0m"
-		fun_bar 'pythonproxyinstall'
+		pythonproxyinstall
 		echo -e "\n  \033[1;32mInstalling STS No Load!\033[0m"
-		fun_bar 'service'
+		service
 		echo -e "\n  \033[1;32mInstalling STS No Load Service!\033[0m"
-		fun_bar 'service1'
+		service1
         	echo -e "\n  \033[1;32mInstalling BADVPN-UDPGW!\033[0m"
-		fun_bar 'InstBadVPN'
+		InstBadVPN
 		echo -e "\n  \033[1;32mInstalling OVPN No Internet Fixer!\033[0m"
-		fun_bar 'OVPNFixer'
+		OVPNFixer
 		echo -e "\n  \033[1;32mInstalling Startup Script!\033[0m"
-		fun_bar 'ConfStartup'
+		ConfStartup
         	echo -e "\n  \033[1;32mInstalling Menu Script!\033[0m"
-		fun_bar 'ConfMenu'
+		ConfMenu
 		echo -e "\n  \033[1;32mInstalling Squid Proxy!\033[0m"
-		fun_bar 'squidproxyinstall'	
+		squidproxyinstall	
 		premiumcategory		
 		echo -e "\n  \033[1;32mEnable System Services!\033[0m"
-		fun_bar 'serviceenable'		
+		serviceenable	
 		sleep 3
 		clear
 		display_menu
@@ -1034,33 +1034,33 @@ do
 		clear
 		display_menu
 		echo -e "\033[1;32m		Installing VIP Server!\033[0m"
-		echo -e "\n  \033[1;32mUpdating Sytem!\033[0m"
-		fun_bar 'systemupdate'		
+		echo -e "\n  \033[1;32mUpdating System!\033[0m"
+		systemupdate		
 		echo -e "\n  \033[1;32mInstalling System Packages!\033[0m"
-		fun_bar 'systempackages'
+		systempackages
 		echo -e "\n  \033[1;32mCreating Files!\033[0m"
-		fun_bar 'filesfolders'
+		filesfolders
 		echo -e "\n  \033[1;32mCreating IPtable Rules!\033[0m"
-		fun_bar 'iptablesrules'		
+		iptablesrules		
 		echo -e "\n  \033[1;32mInstalling Python Proxy!\033[0m"
-		fun_bar 'pythonproxyinstall'
+		pythonproxyinstall
 		echo -e "\n  \033[1;32mInstalling STS No Load!\033[0m"
-		fun_bar 'service'
+		service
 		echo -e "\n  \033[1;32mInstalling STS No Load Service!\033[0m"
-		fun_bar 'service1'
+		service1
         	echo -e "\n  \033[1;32mInstalling BADVPN-UDPGW!\033[0m"
-		fun_bar 'InstBadVPN'
+		InstBadVPN
 		echo -e "\n  \033[1;32mInstalling OVPN No Internet Fixer!\033[0m"
-		fun_bar 'OVPNFixer'
+		OVPNFixer
 		echo -e "\n  \033[1;32mInstalling Startup Script!\033[0m"
-		fun_bar 'ConfStartup'
+		ConfStartup
         	echo -e "\n  \033[1;32mInstalling Menu Script!\033[0m"
-		fun_bar 'ConfMenu'
+		ConfMenu
 		echo -e "\n  \033[1;32mInstalling Squid Proxy!\033[0m"
-		fun_bar 'squidproxyinstall'	
+		squidproxyinstall	
 		vipcategory		
 		echo -e "\n  \033[1;32mEnable System Services!\033[0m"
-		fun_bar 'serviceenable'		
+		serviceenable		
 		sleep 3
 		clear
 		display_menu
@@ -1073,33 +1073,33 @@ do
 		clear
 		display_menu
 		echo -e "\033[1;32m		Installing Private Server!\033[0m"
-		echo -e "\n  \033[1;32mUpdating Sytem!\033[0m"
-		fun_bar 'systemupdate'		
+		echo -e "\n  \033[1;32mUpdating System!\033[0m"
+		systemupdate		
 		echo -e "\n  \033[1;32mInstalling System Packages!\033[0m"
-		fun_bar 'systempackages'
+		systempackages
 		echo -e "\n  \033[1;32mCreating Files!\033[0m"
-		fun_bar 'filesfolders'
+		filesfolders
 		echo -e "\n  \033[1;32mCreating IPtable Rules!\033[0m"
-		fun_bar 'iptablesrules'		
+		iptablesrules		
 		echo -e "\n  \033[1;32mInstalling Python Proxy!\033[0m"
-		fun_bar 'pythonproxyinstall'
+		pythonproxyinstall
 		echo -e "\n  \033[1;32mInstalling STS No Load!\033[0m"
-		fun_bar 'service'
+		service
 		echo -e "\n  \033[1;32mInstalling STS No Load Service!\033[0m"
-		fun_bar 'service1'
+		service1
         	echo -e "\n  \033[1;32mInstalling BADVPN-UDPGW!\033[0m"
-		fun_bar 'InstBadVPN'
+		InstBadVPN
 		echo -e "\n  \033[1;32mInstalling OVPN No Internet Fixer!\033[0m"
-		fun_bar 'OVPNFixer'
+		OVPNFixer
 		echo -e "\n  \033[1;32mInstalling Startup Script!\033[0m"
-		fun_bar 'ConfStartup'
+		ConfStartup
         	echo -e "\n  \033[1;32mInstalling Menu Script!\033[0m"
-		fun_bar 'ConfMenu'
+		ConfMenu
 		echo -e "\n  \033[1;32mInstalling Squid Proxy!\033[0m"
-		fun_bar 'squidproxyinstall'	
+		squidproxyinstall	
 		privatecategory		
 		echo -e "\n  \033[1;32mEnable System Services!\033[0m"
-		fun_bar 'serviceenable'	
+		serviceenable	
 		sleep 3
 		clear
 		display_menu
