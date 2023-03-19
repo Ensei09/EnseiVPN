@@ -71,9 +71,9 @@ systemctl restart dropbear
 }
 
 systempackages () {
-apt-get install mysql-client openvpn unzip build-essential curl privoxy stunnel4 net-tools screen -y
-apt-get install php php-mysqli php-mysql php-gd php-mbstring -y
-apt-get install php-ldap php-odbc php-pear php-xml php-xmlrpc php-mbstring php-snmp php-soap -y
+apt-get -y install mysql-client openvpn unzip build-essential curl privoxy stunnel4 net-tools screen
+apt-get -y install php php-mysqli php-mysql php-gd php-mbstring
+apt-get -y install php-ldap php-odbc php-pear php-xml php-xmlrpc php-mbstring php-snmp php-soap
 }
 
 filesfolders () {
