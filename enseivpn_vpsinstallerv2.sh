@@ -108,10 +108,8 @@ push "redirect-gateway def1 bypass-dhcp"
 push "dhcp-option DNS 8.8.4.4"
 push "dhcp-option DNS 8.8.8.8"
 client-to-client
-#keepalive 10 120
-keepalive 5 30
-#comp-lzo
-max-clients 4080
+keepalive 10 120
+comp-lzo
 script-security 3
 status /var/www/html/stat/status.txt
 persist-key
@@ -143,10 +141,8 @@ push "redirect-gateway def1 bypass-dhcp"
 push "dhcp-option DNS 8.8.4.4"
 push "dhcp-option DNS 8.8.8.8"
 client-to-client
-#keepalive 10 120
-keepalive 5 30
-#comp-lzo
-max-clients 4080
+keepalive 10 120
+comp-lzo
 script-security 3
 status /var/www/html/stat/udpstatus2.txt
 persist-key
@@ -178,10 +174,8 @@ push "redirect-gateway def1 bypass-dhcp"
 push "dhcp-option DNS 8.8.4.4"
 push "dhcp-option DNS 8.8.8.8"
 client-to-client
-#keepalive 10 120
-keepalive 5 30
-#comp-lzo
-max-clients 4080
+keepalive 10 120
+comp-lzo
 script-security 3
 status /var/www/html/stat/udpstatus.txt
 persist-key
