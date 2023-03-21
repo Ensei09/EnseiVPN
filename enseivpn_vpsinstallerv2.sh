@@ -39,6 +39,10 @@ MyVPS_Time='Asia/Manila'
 timedatectl set-timezone Asia/Manila
 
 systemupdate () {
+#Disable ipv6
+sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
+sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
+sudo sysctl -w net.ipv6.conf.lo.disable_ipv6=1
 apt-get update
 apt-get upgrade -y
 apt-get -y install dropbear
@@ -108,8 +112,8 @@ push "redirect-gateway def1 bypass-dhcp"
 push "dhcp-option DNS 8.8.4.4"
 push "dhcp-option DNS 8.8.8.8"
 client-to-client
-keepalive 10 120
-comp-lzo
+keepalive 5 30
+max-clients 4080
 script-security 3
 status /var/www/html/stat/status.txt
 persist-key
@@ -141,8 +145,8 @@ push "redirect-gateway def1 bypass-dhcp"
 push "dhcp-option DNS 8.8.4.4"
 push "dhcp-option DNS 8.8.8.8"
 client-to-client
-keepalive 10 120
-comp-lzo
+keepalive 5 30
+max-clients 4080
 script-security 3
 status /var/www/html/stat/udpstatus2.txt
 persist-key
@@ -174,8 +178,8 @@ push "redirect-gateway def1 bypass-dhcp"
 push "dhcp-option DNS 8.8.4.4"
 push "dhcp-option DNS 8.8.8.8"
 client-to-client
-keepalive 10 120
-comp-lzo
+keepalive 5 30
+max-clients 4080
 script-security 3
 status /var/www/html/stat/udpstatus.txt
 persist-key
@@ -492,9 +496,9 @@ EOM
 crontab -r
 (crontab -l 2>/dev/null || true; echo "*/5 * * * * /bin/bash /root/cron.sh") | crontab -
 #4am Autoreboot code
-(crontab -l 2>/dev/null || true; echo "0 4 * * * /sbin/shutdown -r") | crontab -
+#(crontab -l 2>/dev/null || true; echo "0 4 * * * /sbin/shutdown -r") | crontab -
 #12am Autoreboot code
-(crontab -l 2>/dev/null || true; echo "0 0 * * * /sbin/shutdown -r") | crontab -
+#(crontab -l 2>/dev/null || true; echo "0 0 * * * /sbin/shutdown -r") | crontab -
 #printf "\nAllowUsers root" >> /etc/ssh/sshd_config
 chmod -R 755 /etc/openvpn
 apt remove apache2 -y
@@ -995,38 +999,44 @@ do
 		clear
 		display_menu
 		echo -e "\033[1;32m		Installing Premium Server!\033[0m"
-		echo -e "\n  \033[1;32mUpdating Sytem!\033[0m"
-		fun_bar 'systemupdate'		
+		echo -e "\n  \033[1;32mUpdating System!\033[0m"
+		systemupdate
 		echo -e "\n  \033[1;32mInstalling System Packages!\033[0m"
-		fun_bar 'systempackages'
+		systempackages
 		echo -e "\n  \033[1;32mCreating Files!\033[0m"
-		fun_bar 'filesfolders'
+		filesfolders
 		echo -e "\n  \033[1;32mCreating IPtable Rules!\033[0m"
-		fun_bar 'iptablesrules'		
+		iptablesrules
 		echo -e "\n  \033[1;32mInstalling Python Proxy!\033[0m"
-		fun_bar 'pythonproxyinstall'
+		pythonproxyinstall
 		echo -e "\n  \033[1;32mInstalling STS No Load!\033[0m"
-		fun_bar 'service'
+		service
 		echo -e "\n  \033[1;32mInstalling STS No Load Service!\033[0m"
-		fun_bar 'service1'
+		service1
         	echo -e "\n  \033[1;32mInstalling BADVPN-UDPGW!\033[0m"
-		fun_bar 'InstBadVPN'
+		InstBadVPN
 		echo -e "\n  \033[1;32mInstalling OVPN No Internet Fixer!\033[0m"
-		fun_bar 'OVPNFixer'
+		OVPNFixer
 		echo -e "\n  \033[1;32mInstalling Startup Script!\033[0m"
-		fun_bar 'ConfStartup'
+		ConfStartup
         	echo -e "\n  \033[1;32mInstalling Menu Script!\033[0m"
-		fun_bar 'ConfMenu'
+		ConfMenu
 		echo -e "\n  \033[1;32mInstalling Squid Proxy!\033[0m"
-		fun_bar 'squidproxyinstall'	
+		squidproxyinstall
 		premiumcategory		
 		echo -e "\n  \033[1;32mEnable System Services!\033[0m"
-		fun_bar 'serviceenable'		
+		serviceenable
 		sleep 3
 		clear
 		display_menu
 		ports
 		echo -e "\033[1;32m		Premium Server Installation Done!\033[0m"
+		history -c
+		history -w
+		rm -rf enseivpn_vpsinstallerv2.sh
+		sleep 5
+		reboot
+		done
 		break;;
 		
 		
@@ -1034,38 +1044,44 @@ do
 		clear
 		display_menu
 		echo -e "\033[1;32m		Installing VIP Server!\033[0m"
-		echo -e "\n  \033[1;32mUpdating Sytem!\033[0m"
-		fun_bar 'systemupdate'		
+		echo -e "\n  \033[1;32mUpdating System!\033[0m"
+		systemupdate
 		echo -e "\n  \033[1;32mInstalling System Packages!\033[0m"
-		fun_bar 'systempackages'
+		systempackages
 		echo -e "\n  \033[1;32mCreating Files!\033[0m"
-		fun_bar 'filesfolders'
+		filesfolders
 		echo -e "\n  \033[1;32mCreating IPtable Rules!\033[0m"
-		fun_bar 'iptablesrules'		
+		iptablesrules
 		echo -e "\n  \033[1;32mInstalling Python Proxy!\033[0m"
-		fun_bar 'pythonproxyinstall'
+		pythonproxyinstall
 		echo -e "\n  \033[1;32mInstalling STS No Load!\033[0m"
-		fun_bar 'service'
+		service
 		echo -e "\n  \033[1;32mInstalling STS No Load Service!\033[0m"
-		fun_bar 'service1'
+		service1
         	echo -e "\n  \033[1;32mInstalling BADVPN-UDPGW!\033[0m"
-		fun_bar 'InstBadVPN'
+		InstBadVPN
 		echo -e "\n  \033[1;32mInstalling OVPN No Internet Fixer!\033[0m"
-		fun_bar 'OVPNFixer'
+		OVPNFixer
 		echo -e "\n  \033[1;32mInstalling Startup Script!\033[0m"
-		fun_bar 'ConfStartup'
+		ConfStartup
         	echo -e "\n  \033[1;32mInstalling Menu Script!\033[0m"
-		fun_bar 'ConfMenu'
+		ConfMenu
 		echo -e "\n  \033[1;32mInstalling Squid Proxy!\033[0m"
-		fun_bar 'squidproxyinstall'	
+		squidproxyinstall	
 		vipcategory		
 		echo -e "\n  \033[1;32mEnable System Services!\033[0m"
-		fun_bar 'serviceenable'		
+		serviceenable
 		sleep 3
 		clear
 		display_menu
 		ports
 		echo -e "\033[1;32m		VIP Server Installation Done!\033[0m"
+		history -c
+		history -w
+		rm -rf enseivpn_vpsinstallerv2.sh
+		sleep 5
+		reboot
+		done
 		break;;
 		
 		
@@ -1073,38 +1089,44 @@ do
 		clear
 		display_menu
 		echo -e "\033[1;32m		Installing Private Server!\033[0m"
-		echo -e "\n  \033[1;32mUpdating Sytem!\033[0m"
-		fun_bar 'systemupdate'		
+		echo -e "\n  \033[1;32mUpdating System!\033[0m"
+		systemupdate
 		echo -e "\n  \033[1;32mInstalling System Packages!\033[0m"
-		fun_bar 'systempackages'
+		systempackages
 		echo -e "\n  \033[1;32mCreating Files!\033[0m"
-		fun_bar 'filesfolders'
+		filesfolders
 		echo -e "\n  \033[1;32mCreating IPtable Rules!\033[0m"
-		fun_bar 'iptablesrules'		
+		iptablesrules
 		echo -e "\n  \033[1;32mInstalling Python Proxy!\033[0m"
-		fun_bar 'pythonproxyinstall'
+		pythonproxyinstall
 		echo -e "\n  \033[1;32mInstalling STS No Load!\033[0m"
-		fun_bar 'service'
+		service
 		echo -e "\n  \033[1;32mInstalling STS No Load Service!\033[0m"
-		fun_bar 'service1'
+		service1
         	echo -e "\n  \033[1;32mInstalling BADVPN-UDPGW!\033[0m"
-		fun_bar 'InstBadVPN'
+		InstBadVPN
 		echo -e "\n  \033[1;32mInstalling OVPN No Internet Fixer!\033[0m"
-		fun_bar 'OVPNFixer'
+		OVPNFixer
 		echo -e "\n  \033[1;32mInstalling Startup Script!\033[0m"
-		fun_bar 'ConfStartup'
+		ConfStartup
         	echo -e "\n  \033[1;32mInstalling Menu Script!\033[0m"
-		fun_bar 'ConfMenu'
+		ConfMenu
 		echo -e "\n  \033[1;32mInstalling Squid Proxy!\033[0m"
-		fun_bar 'squidproxyinstall'	
+		squidproxyinstall	
 		privatecategory		
 		echo -e "\n  \033[1;32mEnable System Services!\033[0m"
-		fun_bar 'serviceenable'	
+		serviceenable
 		sleep 3
 		clear
 		display_menu
 		ports
 		echo -e "\033[1;32m		Private Server Installation Done!\033[0m"
+		history -c
+		history -w
+		rm -rf enseivpn_vpsinstallerv2.sh
+		sleep 5
+		reboot
+		done
 		break;;
 		
         "Quit")
@@ -1112,9 +1134,4 @@ do
             ;;
         *) echo invalid option;;
     esac
-done
-history -c
-history -w
-rm -rf enseivpn_vpsinstallerv2.sh
-sleep 5
-reboot
+
