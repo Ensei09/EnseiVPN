@@ -1031,7 +1031,11 @@ do
 		display_menu
 		ports
 		echo -e "\033[1;32m		Premium Server Installation Done!\033[0m"
-		done
+		history -c
+		history -w
+		rm -rf enseivpn_vpsinstallerv2.sh
+		sleep 5
+		reboot
 		break;;
 		
 		
@@ -1071,7 +1075,11 @@ do
 		display_menu
 		ports
 		echo -e "\033[1;32m		VIP Server Installation Done!\033[0m"
-		done
+		history -c
+		history -w
+		rm -rf enseivpn_vpsinstallerv2.sh
+		sleep 5
+		reboot
 		break;;
 		
 		
@@ -1111,7 +1119,11 @@ do
 		display_menu
 		ports
 		echo -e "\033[1;32m		Private Server Installation Done!\033[0m"
-		done
+		history -c
+		history -w
+		rm -rf enseivpn_vpsinstallerv2.sh
+		sleep 5
+		reboot
 		break;;
 		
         "Quit")
@@ -1119,8 +1131,4 @@ do
             ;;
         *) echo invalid option;;
     esac
-history -c
-history -w
-rm -rf enseivpn_vpsinstallerv2.sh
-sleep 5
-reboot
+done
