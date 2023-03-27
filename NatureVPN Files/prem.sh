@@ -2,7 +2,7 @@
 error_reporting(E_ERROR | E_PARSE);
 ini_set('display_errors', '1');
 
-$DB_host = "34.124.186.3";
+$DB_host = "159.223.69.151";
 $DB_user = "sql_panel_nature";
 $DB_pass = "sRFzNwXpw5Drwm7F";
 $DB_name = "sql_panel_nature";
