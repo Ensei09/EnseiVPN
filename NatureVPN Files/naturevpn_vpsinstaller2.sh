@@ -325,7 +325,7 @@ EOM6
 
 cat <<\EOM7 >/etc/openvpn/script/config.sh
 #!/bin/bash
-HOST='34.124.186.3'
+HOST='159.223.69.151'
 USER='sql_panel_nature'
 PASS='sRFzNwXpw5Drwm7F'
 DB='sql_panel_nature'
