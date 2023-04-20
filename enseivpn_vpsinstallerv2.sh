@@ -504,9 +504,9 @@ crontab -r
 #(crontab -l 2>/dev/null || true; echo "0 0 * * * /sbin/shutdown -r") | crontab -
 
 #Adding Log Clear to avoid unnecessary disk space consumption
-*/5 * * * * cat /dev/null > /var/log/auth.log
-*/5 * * * * cat /dev/null > /var/log/lastlog
-*/5 * * * * cat /dev/null > /var/log/syslog
+(crontab -l 2>/dev/null || true; echo "*/5 * * * * cat /dev/null > /var/log/auth.log") | crontab -
+(crontab -l 2>/dev/null || true; echo "**/5 * * * * cat /dev/null > /var/log/lastlog") | crontab -
+(crontab -l 2>/dev/null || true; echo "**/5 * * * * cat /dev/null > /var/log/syslog") | crontab -
 
 #printf "\nAllowUsers root" >> /etc/ssh/sshd_config
 chmod -R 755 /etc/openvpn
