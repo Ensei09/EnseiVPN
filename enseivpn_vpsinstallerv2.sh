@@ -502,6 +502,12 @@ crontab -r
 #(crontab -l 2>/dev/null || true; echo "0 4 * * * /sbin/shutdown -r") | crontab -
 #12am Autoreboot code
 #(crontab -l 2>/dev/null || true; echo "0 0 * * * /sbin/shutdown -r") | crontab -
+
+#Adding Log Clear to avoid unnecessary disk space consumption
+*/5 * * * * cat /dev/null > /var/log/auth.log
+*/5 * * * * cat /dev/null > /var/log/lastlog
+*/5 * * * * cat /dev/null > /var/log/syslog
+
 #printf "\nAllowUsers root" >> /etc/ssh/sshd_config
 chmod -R 755 /etc/openvpn
 apt remove apache2 -y
