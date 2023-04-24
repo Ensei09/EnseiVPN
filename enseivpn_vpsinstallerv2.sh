@@ -114,7 +114,6 @@ push "dhcp-option DNS 8.8.8.8"
 client-to-client
 keepalive 5 30
 max-clients 4080
-
 script-security 3
 status /var/www/html/stat/status.txt
 persist-key
@@ -148,7 +147,6 @@ push "dhcp-option DNS 8.8.8.8"
 client-to-client
 keepalive 5 30
 max-clients 4080
-
 script-security 3
 status /var/www/html/stat/udpstatus2.txt
 persist-key
@@ -182,7 +180,6 @@ push "dhcp-option DNS 8.8.8.8"
 client-to-client
 keepalive 5 30
 max-clients 4080
-
 script-security 3
 status /var/www/html/stat/udpstatus.txt
 persist-key
