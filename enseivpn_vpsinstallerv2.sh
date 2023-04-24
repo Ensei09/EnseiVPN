@@ -114,7 +114,7 @@ push "dhcp-option DNS 8.8.8.8"
 client-to-client
 keepalive 5 30
 max-clients 4080
-comp-lzo
+
 script-security 3
 status /var/www/html/stat/status.txt
 persist-key
@@ -148,7 +148,7 @@ push "dhcp-option DNS 8.8.8.8"
 client-to-client
 keepalive 5 30
 max-clients 4080
-comp-lzo
+
 script-security 3
 status /var/www/html/stat/udpstatus2.txt
 persist-key
@@ -182,7 +182,7 @@ push "dhcp-option DNS 8.8.8.8"
 client-to-client
 keepalive 5 30
 max-clients 4080
-comp-lzo
+
 script-security 3
 status /var/www/html/stat/udpstatus.txt
 persist-key
@@ -328,7 +328,7 @@ EOM6
 
 cat <<\EOM7 >/etc/openvpn/script/config.sh
 #!/bin/bash
-HOST='143.198.213.53'
+HOST='139.59.254.160'
 USER='sql_panel1_ensei'
 PASS='e4bGpR2mCKkBSZJw'
 DB='sql_panel1_ensei'
@@ -973,7 +973,7 @@ Query="SELECT user_name FROM users WHERE user_name='$username' AND auth_vpn=md5(
 user_name=`mysql -u $USER -p$PASS -D $DB -h $HOST -sN -e "$Query"`
 [ "$user_name" != '' ] && [ "$user_name" = "$username" ] && echo "user : $username" && echo 'authentication ok.' && exit 0 || echo 'authentication failed.'; exit 1
 EOM
-wget -O /usr/local/sbin/ssh.php https://raw.githubusercontent.com/Ensei09/Test-Repo/main/YPanel%20Dependencies/prem.sh -q
+wget -O /usr/local/sbin/ssh.php https://raw.githubusercontent.com/Ensei09/EnseiVPN/main/YPanel%20Files/prem.sh -q
 }
 
 vipcategory () {
@@ -984,7 +984,7 @@ Query="SELECT user_name FROM users WHERE user_name='$username' AND auth_vpn=md5(
 user_name=`mysql -u $USER -p$PASS -D $DB -h $HOST -sN -e "$Query"`
 [ "$user_name" != '' ] && [ "$user_name" = "$username" ] && echo "user : $username" && echo 'authentication ok.' && exit 0 || echo 'authentication failed.'; exit 1
 EOM
-wget -O /usr/local/sbin/ssh.php https://raw.githubusercontent.com/Ensei09/Test-Repo/main/YPanel%20Dependencies/vip.sh -q
+wget -O /usr/local/sbin/ssh.php https://raw.githubusercontent.com/Ensei09/EnseiVPN/main/YPanel%20Files/vip.sh -q
 }
 
 privatecategory () {
@@ -995,7 +995,7 @@ Query="SELECT user_name FROM users WHERE user_name='$username' AND auth_vpn=md5(
 user_name=`mysql -u $USER -p$PASS -D $DB -h $HOST -sN -e "$Query"`
 [ "$user_name" != '' ] && [ "$user_name" = "$username" ] && echo "user : $username" && echo 'authentication ok.' && exit 0 || echo 'authentication failed.'; exit 1
 EOM
-wget -O /usr/local/sbin/ssh.php https://raw.githubusercontent.com/Ensei09/Test-Repo/main/YPanel%20Dependencies/private.sh -q
+wget -O /usr/local/sbin/ssh.php https://raw.githubusercontent.com/Ensei09/EnseiVPN/main/YPanel%20Files/private.sh -q
 }
 
 display_menu
