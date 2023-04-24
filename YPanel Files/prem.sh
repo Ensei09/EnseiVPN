@@ -3,7 +3,7 @@ error_reporting(E_ERROR | E_PARSE);
 ini_set('display_errors', '1');
 
 ##Set DB Details of Yellow Panel
-$DB_host = "178.128.209.10";
+$DB_host = "139.59.254.160";
 $DB_user = "sql_test1_ensei";
 $DB_pass = "e4bGpR2mCKkBSZJw";
 $DB_name = "sql_test1_ensei";
