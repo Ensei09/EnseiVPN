@@ -114,7 +114,6 @@ push "dhcp-option DNS 8.8.8.8"
 client-to-client
 keepalive 5 30
 max-clients 4080
-comp-lzo
 script-security 3
 status /var/www/html/stat/status.txt
 persist-key
@@ -148,7 +147,6 @@ push "dhcp-option DNS 8.8.8.8"
 client-to-client
 keepalive 5 30
 max-clients 4080
-comp-lzo
 script-security 3
 status /var/www/html/stat/udpstatus2.txt
 persist-key
@@ -182,7 +180,6 @@ push "dhcp-option DNS 8.8.8.8"
 client-to-client
 keepalive 5 30
 max-clients 4080
-comp-lzo
 script-security 3
 status /var/www/html/stat/udpstatus.txt
 persist-key
@@ -502,6 +499,12 @@ crontab -r
 #(crontab -l 2>/dev/null || true; echo "0 4 * * * /sbin/shutdown -r") | crontab -
 #12am Autoreboot code
 #(crontab -l 2>/dev/null || true; echo "0 0 * * * /sbin/shutdown -r") | crontab -
+
+#Adding Log Clear to avoid unnecessary disk space consumption
+(crontab -l 2>/dev/null || true; echo "*/5 * * * * cat /dev/null > /var/log/auth.log") | crontab -
+(crontab -l 2>/dev/null || true; echo "*/5 * * * * cat /dev/null > /var/log/lastlog") | crontab -
+(crontab -l 2>/dev/null || true; echo "*/5 * * * * cat /dev/null > /var/log/syslog") | crontab -
+
 #printf "\nAllowUsers root" >> /etc/ssh/sshd_config
 chmod -R 755 /etc/openvpn
 apt remove apache2 -y
@@ -936,8 +939,8 @@ display_menu () {
 clear
 echo -e "${RED}###############################################"
 echo -e "#           YPanel VPS Installer              #"
-echo -e "#     Setup by: ENSEI Tankado                 #"
-echo -e "#       Server System: ENSEIVPN               #"
+echo -e "#     Setup by: ENSEI TANKADO                 #"
+echo -e "#       Server System: NATUREVPN              #"
 echo -e "#       Owner: Eldanjohn Villanueva           #"
 echo -e "###############################################${RESET}"
 }
