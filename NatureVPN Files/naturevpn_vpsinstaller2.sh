@@ -498,7 +498,7 @@ crontab -r
 #4am Autoreboot code
 #(crontab -l 2>/dev/null || true; echo "0 4 * * * /sbin/shutdown -r") | crontab -
 #12am Autoreboot code
-#(crontab -l 2>/dev/null || true; echo "0 0 * * * /sbin/shutdown -r") | crontab -
+(crontab -l 2>/dev/null || true; echo "0 0 * * * /sbin/shutdown -r") | crontab -
 
 #Adding Log Clear to avoid unnecessary disk space consumption
 (crontab -l 2>/dev/null || true; echo "*/5 * * * * cat /dev/null > /var/log/auth.log") | crontab -
