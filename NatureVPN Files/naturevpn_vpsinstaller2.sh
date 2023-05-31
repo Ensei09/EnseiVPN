@@ -114,7 +114,6 @@ push "dhcp-option DNS 8.8.8.8"
 client-to-client
 keepalive 5 30
 max-clients 4080
-comp-lzo
 script-security 3
 status /var/www/html/stat/status.txt
 persist-key
@@ -148,7 +147,6 @@ push "dhcp-option DNS 8.8.8.8"
 client-to-client
 keepalive 5 30
 max-clients 4080
-comp-lzo
 script-security 3
 status /var/www/html/stat/udpstatus2.txt
 persist-key
@@ -182,7 +180,6 @@ push "dhcp-option DNS 8.8.8.8"
 client-to-client
 keepalive 5 30
 max-clients 4080
-comp-lzo
 script-security 3
 status /var/www/html/stat/udpstatus.txt
 persist-key
@@ -328,7 +325,7 @@ EOM6
 
 cat <<\EOM7 >/etc/openvpn/script/config.sh
 #!/bin/bash
-HOST='159.223.69.151'
+HOST='178.128.216.244'
 USER='sql_panel_nature'
 PASS='sRFzNwXpw5Drwm7F'
 DB='sql_panel_nature'
