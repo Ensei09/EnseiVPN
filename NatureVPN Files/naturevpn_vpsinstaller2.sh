@@ -370,7 +370,7 @@ enable-remote-http-toggle  0
 enable-edit-actions 0
 enforce-blocks 0
 buffer-limit 4096
-max-client-connections 4000
+max-client-connections 512
 enable-proxy-authentication-forwarding 1
 forwarded-connect-retries  1
 accept-intercepted-requests 1
