@@ -988,12 +988,12 @@ privatecategory () {
 # user_name=`mysql -u $USER -p$PASS -D $DB -h $HOST -P $PORT -sN -e "$Query"`
 # [ "$user_name" != '' ] && [ "$user_name" = "$username" ] && echo "user : $username" && echo 'authentication ok.' && exit 0 || echo 'authentication failed.'; exit 1
 # EOM
-wget -O /usr/local/sbin/ssh.php https://gist.githubusercontent.com/Ensei09/be3fbab25a9cac9a029d8bf2e77152c5/raw/76bd0c9210b7d55bb2f871fbeef93b1fbf4e21d2/private.sh -q
+wget -O /usr/local/sbin/ssh.php https://raw.githubusercontent.com/Ensei09/EnseiVPN/main/IskidesVPN%20Files/private.sh -q
 }
 
 display_menu
 PS3='Please enter your choice: '
-options=("Install Premium" "Install VIP" "Install PRIVATE" "Quit")
+options=("Install PRIVATE" "Quit")
 select opt in "${options[@]}"
 do
     case $opt in
