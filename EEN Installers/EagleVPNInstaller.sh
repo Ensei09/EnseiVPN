@@ -930,7 +930,7 @@ clear
 echo -e "${RED}###############################################"
 echo -e "#           YPanel VPS Installer              #"
 echo -e "#     Setup by: ENSEI Tankado                 #"
-echo -e "#       Server System: INTROVERT VPN          #"
+echo -e "#       Server System: EAGLE VPN              #"
 echo -e "#       Owner: Eldanjohn Villanueva           #"
 echo -e "###############################################${RESET}"
 }
