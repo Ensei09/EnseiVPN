@@ -38,13 +38,6 @@ MyVPS_Time='Asia/Manila'
 
 timedatectl set-timezone Asia/Manila
 
-echo -e "Enter Panel Database Details for OVPN Connection"
-read -p "Enter Database IP Address: " DB_IP_ADDRESS
-read -p "Enter Database Port: " DB_PORT
-read -p "Enter Database Name: " DB_NAME
-read -p "Enter Database User: " DB_USER
-read -p "Enter Database Pass: " DB_PASS
-
 systemupdate () {
 #Disable ipv6
 sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
@@ -332,11 +325,11 @@ EOM6
 
 cat <<\EOM7 >/etc/openvpn/script/config.sh
 #!/bin/bash
-HOST='$DB_IP_ADDRESS'
-USER='$DB_USER'
-PASS='$DB_PASS'
-DB='$DB_NAME'
-PORT='$DB_PORT'
+HOST='128.199.138.158'
+USER='sql_panel_kapuso'
+PASS='yfLHaJEreWyCAEYF'
+DB='sql_panel_kapuso'
+PORT='4417'
 EOM7
 
 cat <<\EOM8 >/etc/openvpn/script/connect.sh
