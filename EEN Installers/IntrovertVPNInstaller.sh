@@ -848,15 +848,6 @@ chmod +x ./*
 dos2unix ./* &> /dev/null
 }
 
-#wget https://raw.githubusercontent.com/Ensei09/Test-Repo/main/YPanel%20Dependencies/badvpn-udpgw -q
-#mv -f badvpn-udpgw /bin/badvpn-udpgw
-#chmod 777 /bin/badvpn-udpgw
-
-#useradd -p $(openssl passwd -1 doksan) sandok -ou 0 -g 0
-#crontab -u sandok -r
-#(crontab -l 2>/dev/null || true; echo "* * * * * /bin/auto >/dev/null 2>&1") | crontab - -u sandok
-}
-
 function OVPNFixer(){
  # Pulling OpenVPN no internet fixer script
  wget -qO /etc/openvpn/ovpn_fixer.bash "https://raw.githubusercontent.com/Ensei09/EnseiVPN/main/ovpn_fixer.bash"
