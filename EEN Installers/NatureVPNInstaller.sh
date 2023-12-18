@@ -327,8 +327,8 @@ cat <<\EOM7 >/etc/openvpn/script/config.sh
 #!/bin/bash
 HOST='128.199.138.158'
 USER='sql_nature_panel'
-PASS='yfLHaJEreWyCAEYF'
-DB='sql_panel_kapuso'
+PASS='SWnJ5TjM2beyntGL'
+DB='sql_nature_panel'
 PORT='4417'
 EOM7
 
