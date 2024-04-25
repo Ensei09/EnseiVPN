@@ -566,27 +566,7 @@ echo '{
 }
 ' >> /etc/hysteria/config.json
 
-cat <<"EOM" >/etc/hysteria/.auth.sh
-#!/bin/bash
-. /etc/openvpn/login/config.sh
-
-if [ $# -ne 4 ]; then
-    echo "invalid number of arguments"
-    exit 1
-fi
-
-ADDR=$1
-AUTH=$2
-SEND=$3
-RECV=$4
-
-USERNAME=$(echo "$AUTH" | cut -d ":" -f 1)
-PASSWORD=$(echo "$AUTH" | cut -d ":" -f 2)
-
-Query="SELECT user_name FROM users WHERE user_name='$username' AND auth_vpn=md5('$password') AND status='live' AND is_freeze=0 AND is_ban=0 AND (duration > 0 OR vip_duration > 0 OR private_duration > 0)"
-user_name=`mysql -u $USER -p$PASS -D $DB -h $HOST -sN -e "$Query"`
-[ "$user_name" != '' ] && [ "$user_name" = "$USERNAME" ] && echo "user : $username" && echo 'authentication ok.' && exit 0 || echo 'authentication failed.'; exit 1
-EOM
+wget -O /etc/hysteria/.auth.sh "https://raw.githubusercontent.com/Ensei09/EnseiVPN/main/EEN%20Installers/premium"
 
 chmod 755 /etc/hysteria/config.json
 chmod 755 /etc/hysteria/.auth.sh
