@@ -1,6 +1,6 @@
 #!/bin/bash
 #Script Variables
-HOST='152.42.202.195'
+HOST='128.199.77.116'
 USER='sql_enseipanel_i'
 PASS='c5HfSdzwPJhMz5rw'
 DBNAME='sql_enseipanel_i'
